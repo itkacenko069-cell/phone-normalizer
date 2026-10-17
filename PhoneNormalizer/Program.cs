@@ -19,7 +19,11 @@ static string? NormalizePhone(string? phone)
     if (string.IsNullOrWhiteSpace(phone))
         return null;
 
-    phone = phone.Trim();
+    phone = phone.Trim()
+    .Replace(" ", "")
+    .Replace("-", "")
+    .Replace("(", "")
+    .Replace(")", "");
     if (phone.StartsWith("+380") && phone.Length == 13)
         phone = "0" + phone.Substring(4);
     if (phone.Length != 10 || phone[0] != '0')
