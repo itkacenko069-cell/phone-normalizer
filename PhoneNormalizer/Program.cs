@@ -20,7 +20,8 @@ static string? NormalizePhone(string? phone)
         return null;
 
     phone = phone.Trim();
-
+    if (phone.StartsWith("+380") && phone.Length == 13)
+        phone = "0" + phone.Substring(4);
     if (phone.Length != 10 || phone[0] != '0')
         return null;
 
