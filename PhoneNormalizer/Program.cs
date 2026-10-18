@@ -34,8 +34,12 @@ static string? NormalizePhone(string? phone)
         .Replace("(", "")
         .Replace(")", "");
 
-    if (phone.StartsWith("+380") && phone.Length == 13)
+    if (phone.StartsWith("00380") && phone.Length == 14)
+        phone = "0" + phone.Substring(5);
+    else if (phone.StartsWith("+380") && phone.Length == 13)
         phone = "0" + phone.Substring(4);
+    else if (phone.StartsWith("380") && phone.Length == 12)
+        phone = "0" + phone.Substring(3);
 
     if (phone.Length != 10 || phone[0] != '0')
         return null;
