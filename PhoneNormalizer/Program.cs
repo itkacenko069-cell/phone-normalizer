@@ -18,7 +18,7 @@ while (true)
     string? result = NormalizePhone(phone);
 
     if (result == null)
-        Console.WriteLine("Помилка: введіть номер у форматі 0XXXXXXXXX або +380XXXXXXXXX. Дозволено пробіли, дужки та дефіси.");
+        Console.WriteLine("Помилка: неправильний формат номера або код оператора відсутній у дозволеному переліку.");
     else
         Console.WriteLine($"Результат: {result}");
 }
@@ -34,8 +34,13 @@ static string? NormalizePhone(string? phone)
         .Replace("(", "")
         .Replace(")", "");
 
-    if (phone.StartsWith("+380") && phone.Length == 13)
+    if (phone.StartsWith("+380"))
+    {
+        if (phone.Length != 13)
+            return null;
+
         phone = "0" + phone.Substring(4);
+    }
 
     if (phone.Length != 10 || phone[0] != '0')
         return null;
@@ -45,6 +50,17 @@ static string? NormalizePhone(string? phone)
         if (symbol < '0' || symbol > '9')
             return null;
     }
+
+    string[] allowedCodes =
+    {
+        "50", "63", "66", "67", "68", "73",
+        "93", "95", "96", "97", "98", "99"
+    };
+
+    string operatorCode = phone.Substring(1, 2);
+
+    if (Array.IndexOf(allowedCodes, operatorCode) < 0)
+        return null;
 
     return $"+380 {phone.Substring(1, 2)} " +
            $"{phone.Substring(3, 3)} " +
